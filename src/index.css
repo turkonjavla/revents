@@ -11,6 +11,10 @@ body {
   ) !important;
 }
 
+.ui.grid {
+  padding-top: 8em;
+}
+
 .masthead.segment {
   min-height: 700px;
   padding: 1em 0 !important;
