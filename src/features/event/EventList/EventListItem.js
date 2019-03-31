@@ -11,7 +11,7 @@ import EventListAttendees from './EventListAttendees';
 class EventListItem extends Component {
   render() {
     const { title, date, description, venue, hostedBy, attendees, hostPhotoURL } = this.props.event;
-    const attendeeList = attendees.map(attendee => <EventListAttendees key={attendee.id} attendee={attendee} />)
+    const attendeeList = attendees && attendees.map(attendee => <EventListAttendees key={attendee.id} attendee={attendee} />)
     return (
       <Segment.Group>
         <Segment>
