@@ -55,15 +55,36 @@ const events = [
 ];
 
 class EventDashboard extends Component {
+  state = {
+    events: events,
+    isOpen: false
+  };
+
+  handleFormOpen = () => {
+    this.setState({
+      isOpen: true
+    });
+  }
+
+  handleCancelForm = () => {
+    this.setState({
+      isOpen: false
+    });
+  }
+
   render() {
+    const { events, isOpen } = this.state;
     return (
       <Grid>
         <Grid.Column width={10}>
           <EventList events={events} />
         </Grid.Column>
         <Grid.Column width={6}>
-          <Button positive content="Create Event" />
-          <EventForm />
+          <Button onClick={this.handleFormOpen} positive content="Create Event" />
+          {
+            isOpen &&
+            <EventForm handleCancel={this.handleCancelForm} />
+          }
         </Grid.Column>
       </Grid>
     )
