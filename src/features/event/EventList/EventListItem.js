@@ -11,6 +11,7 @@ import EventListAttendees from './EventListAttendees';
 class EventListItem extends Component {
   render() {
     const { title, date, description, venue, hostedBy, attendees, hostPhotoURL } = this.props.event;
+    const { event, onEventOpen } = this.props;
     const attendeeList = attendees && attendees.map(attendee => <EventListAttendees key={attendee.id} attendee={attendee} />)
     return (
       <Segment.Group>
@@ -42,7 +43,13 @@ class EventListItem extends Component {
           <span>{ description }</span>
         </Segment>
         <Segment clearing>
-          <Button as="a" color="teal" floated="right" content="View" />
+          <Button 
+            as="a" 
+            color="teal" 
+            floated="right" 
+            content="View" 
+            onClick={onEventOpen(event)}
+          />
         </Segment>
       </Segment.Group>
     )
