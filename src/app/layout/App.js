@@ -12,6 +12,9 @@ import PeopleDashboard from '../../features/user/PeopleDashboard/PeopleDashboard
 import UserDetailsPage from '../../features/user/UserDetails/UserDetailsPage';
 import SettingsDashboard from '../../features/user/Settings/SettingsDashboard';
 
+/* Testing Component */
+import TestComponent from '../../features/testarea/TestComponent';
+
 class App extends Component {
   render() {
     return (
@@ -32,6 +35,7 @@ class App extends Component {
                   <Route path='/people' component={PeopleDashboard} />
                   <Route path='/profile/:id' component={UserDetailsPage} />
                   <Route path='/settings' component={SettingsDashboard} />
+                  <Route path='/test' component={TestComponent} />
                 </Switch>
               </Container>
             </div>
