@@ -1,6 +1,7 @@
 import React from 'react';
+import { Button } from 'semantic-ui-react'
 
-const HomePage = ({history: { push }}) => {
+const HomePage = ({ history: { push } }) => {
   return (
     <div>
       <div className="ui inverted vertical masthead center aligned segment">
@@ -14,10 +15,10 @@ const HomePage = ({history: { push }}) => {
             <div className="content">Re-vents</div>
           </h1>
           <h2>Do whatever you want to do</h2>
-          <div onClick={() => push('/events')} className="ui huge white inverted button">
+          <Button onClick={() => push('/events')} inverted>
             Get Started
             <i className="right arrow icon" />
-          </div>
+          </Button>
         </div>
       </div>
     </div>
