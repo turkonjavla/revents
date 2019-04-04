@@ -26,4 +26,7 @@ const actions = {
   decrementCounte
 }
 
-export default connect(mapStateToProps, actions)(TestComponent);
+export default connect(
+  mapStateToProps, 
+  actions
+)(TestComponent);
