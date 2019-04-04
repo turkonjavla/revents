@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import cuid from 'cuid';
 import { Grid, Button } from 'semantic-ui-react'
+
+/* Components */
 import EventList from '../EventList/EventList';
 import EventForm from '../EventForm/EventForm';
 
+/* Redux */
+import { connect } from 'react-redux';
+import { createEvent, updateEvent, deleteEvent } from '../eventActions';
+
 class EventDashboard extends Component {
   state = {
-    events: events,
     isOpen: false,
     selectedEvent: null
   };
@@ -28,9 +33,8 @@ class EventDashboard extends Component {
     newEvent.id = cuid();
     newEvent.hostPhotoURL = '/assets/user.png';
 
-    const updatedEvents = [...this.state.events, newEvent];
+    this.props.createEvent(newEvent);
     this.setState({
-      events: updatedEvents,
       isOpen: false
     });
   }
@@ -43,29 +47,20 @@ class EventDashboard extends Component {
   }
 
   handleUpdateEvent = (updatedEvent) => {
+    this.props.updateEvent(updatedEvent);
     this.setState({
-      events: this.state.events.map(event => {
-        if(event.id === updatedEvent.id) {
-          return Object.assign({}, updatedEvent);
-        }
-        else {
-          return event;
-        }
-      }),
       isOpen: false,
       selectedEvent: null
     })
   }
 
   handleDeleteEvent = (eventId) => () => {
-    const updatedEvents = this.state.events.filter(updatedEvent => updatedEvent.id !== eventId);
-    this.setState({
-      events: updatedEvents
-    });
+    this.props.deleteEvent(eventId);
   }
 
   render() {
-    const { events, isOpen, selectedEvent } = this.state;
+    const { isOpen, selectedEvent } = this.state;
+    const { events } = this.props;
     return (
       <Grid>
         <Grid.Column width={10}>
@@ -76,7 +71,11 @@ class EventDashboard extends Component {
           />
         </Grid.Column>
         <Grid.Column width={6}>
-          <Button onClick={this.handleFormOpen} positive content="Create Event" />
+          <Button 
+            onClick={this.handleFormOpen} 
+            positive 
+            content="Create Event" 
+          />
           {
             isOpen &&
             <EventForm 
@@ -92,4 +91,17 @@ class EventDashboard extends Component {
   }
 }
 
-export default EventDashboard;
+const mapStateToProps = state => ({
+  events: state.events
+});
+
+const actions = {
+  createEvent,
+  updateEvent,
+  deleteEvent
+}
+
+export default connect(
+  mapStateToProps,
+  actions
+)(EventDashboard);
