@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Segment,
   Item,
@@ -20,7 +21,7 @@ class EventListItem extends Component {
       attendees,
       hostPhotoURL
     } = this.props.event;
-    const { event, onEventOpen, deleteEvent } = this.props;
+    const { deleteEvent } = this.props;
     const attendeeList = attendees && attendees.map(attendee => <EventListAttendees key={attendee.id} attendee={attendee} />)
     return (
       <Segment.Group>
@@ -53,11 +54,11 @@ class EventListItem extends Component {
         </Segment>
         <Segment clearing>
           <Button
-            as="a"
-            color="teal"
+            as={Link}
+            to={`/event/${id}`}
+            color="blue"
             floated="right"
             content="View"
-            onClick={onEventOpen(event)}
           />
           <Button
             as="a"
