@@ -7,6 +7,8 @@ import {
   List,
   Button
 } from 'semantic-ui-react';
+
+/* Components */
 import EventListAttendees from './EventListAttendees';
 
 class EventListItem extends Component {
