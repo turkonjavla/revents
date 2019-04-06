@@ -1,50 +1,37 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import cuid from 'cuid';
 import {
   Segment,
   Form,
   Button
 } from 'semantic-ui-react';
 
-const emptyEvent = {
-  title: '',
-  date: '',
-  city: '',
-  venue: '',
-  hostedBy: ''
-}
+/* Redux Actions */
+import { createEvent, updateEvent } from '../../event/eventActions';
 
 class EventForm extends Component {
   state = {
-    event: emptyEvent
-  }
-
-  componentDidMount() {
-    const { selectedEvent, } = this.props;
-
-    if (selectedEvent !== null) {
-      this.setState({
-        event: selectedEvent
-      })
-    }
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.selectedEvent !== prevState.selectedEvent) {
-      return ({
-        event: nextProps.selectedEvent || emptyEvent
-      })
-    }
+    event: Object.assign({}, this.props.event)
   }
 
   onFormSubmit = (e) => {
     e.preventDefault();
     const { id } = this.state.event;
+    const { history: { push, goBack }, createEvent, updateEvent } = this.props;
 
-    if(id) {
-      this.props.updateEvent(this.state.event)
+    if (id) {
+      updateEvent(this.state.event);
+      goBack();
     }
     else {
-      this.props.createEvent(this.state.event);
+      const newEvent = {
+        ...this.state.event,
+        id: cuid(),
+        hostPhotoURL: '/assets/user.png'
+      }
+      createEvent(newEvent);
+      push('/events');
     }
   }
 
@@ -59,7 +46,6 @@ class EventForm extends Component {
   }
 
   render() {
-    const { handleCancel } = this.props;
     const { title, date, city, venue, hostedBy } = this.state.event;
     return (
       <Segment>
@@ -111,11 +97,37 @@ class EventForm extends Component {
             />
           </Form.Field>
           <Button positive type="submit">Submit</Button>
-          <Button onClick={handleCancel} type="button">Cancel</Button>
+          <Button onClick={() => this.props.history.goBack()} type="button">Cancel</Button>
         </Form>
       </Segment>
     )
   }
 }
 
-export default EventForm;
+const mapStateToProps = (state, ownProps) => {
+  const eventId = ownProps.match.params.id;
+  let event = {
+    title: '',
+    date: '',
+    city: '',
+    venue: '',
+    hostedBy: ''
+  };
+
+  if (eventId && state.events.length > 0) {
+    event = state.events.filter(event => event.id === eventId)[0]
+  }
+
+  return {
+    event
+  }
+}
+
+const actions = {
+  createEvent, updateEvent
+};
+
+export default connect(
+  mapStateToProps,
+  actions
+)(EventForm);
