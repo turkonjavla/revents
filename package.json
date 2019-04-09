@@ -5,6 +5,7 @@
   "dependencies": {
     "cuid": "^2.1.1",
     "date-fns": "^1.29.0",
+    "google-map-react": "^0.34.0",
     "moment": "^2.22.0",
     "react": "^16.8.6",
     "react-datepicker": "^1.4.0",
