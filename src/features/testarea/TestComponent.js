@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 
 /* Redux */
 import { connect } from 'react-redux';
@@ -7,9 +7,20 @@ import { incrementCounter, decrementCounter } from './testActions';
 
 /* Google Maps Integration */
 import Script from 'react-load-script';
-import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+import GoogleMapReact from 'google-map-react';
+
+const Marker = () => <Icon name="marker" size="big" color="red" />
 
 class TestComponent extends Component {
+  static defaultProps = {
+    center: {
+      lat: 59.95,
+      lng: 30.33
+    },
+    zoom: 11
+  };
+
   state = {
     address: '',
     scriptLoaded: false
@@ -45,7 +56,7 @@ class TestComponent extends Component {
 
     return (
       <div>
-        <Script 
+        <Script
           url='https://maps.googleapis.com/maps/api/js?key=AIzaSyCxAR4zNhQ4kO1BIEe5v0Bl7zdzKh4L92Q&libraries=places'
           onLoad={this.handleScriptLoaded}
         />
@@ -56,12 +67,24 @@ class TestComponent extends Component {
         <br />
         <br />
         <form onSubmit={this.handleFormSubmit}>
-        {
-          this.state.scriptLoaded &&
-          <PlacesAutocomplete inputProps={inputProps} />
-        }
+          {
+            this.state.scriptLoaded &&
+            <PlacesAutocomplete inputProps={inputProps} />
+          }
           <button type="submit">Submit</button>
         </form>
+        <div style={{ height: '300px', width: '100%' }}>
+          <GoogleMapReact
+            bootstrapURLKeys={{ key: 'AIzaSyCxAR4zNhQ4kO1BIEe5v0Bl7zdzKh4L92Q' }}
+            defaultCenter={this.props.center}
+            defaultZoom={this.props.zoom}
+          >
+            <Marker
+              lat={59.955413}
+              lng={30.337844}
+            />
+          </GoogleMapReact>
+        </div>
       </div>
     )
   }
