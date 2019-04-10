@@ -2,10 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 /* Modals */
-import TestModal from './TestModal'
+import TestModal from './TestModal';
+import RegisterModal from './RegisterModal';
+import LoginModal from './LoginModal';
 
 const modalLookup = {
-  TestModal
+  TestModal,
+  RegisterModal,
+  LoginModal
 }
 
 const ModalManager = ({ currentModal }) => {
