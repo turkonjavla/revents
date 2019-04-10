@@ -18,7 +18,7 @@ const ModalManager = ({ currentModal }) => {
     renderedModal = <ModalComponent {...modalProps} />
   }
 
-  return <span>{renderedModal}</span>;
+  return <span>{renderedModal}</span>
 }
 
 const mapStateToProps = state => ({
