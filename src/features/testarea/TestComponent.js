@@ -10,7 +10,11 @@ import Script from 'react-load-script';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import GoogleMapReact from 'google-map-react';
 
-const Marker = () => <Icon name="marker" size="big" color="red" />
+/* Modals */
+import { openModal } from '../modals/modalActions';
+
+
+/* const Marker = () => <Icon name="marker" size="big" color="red" /> */
 
 class TestComponent extends Component {
   static defaultProps = {
@@ -48,7 +52,7 @@ class TestComponent extends Component {
   }
 
   render() {
-    const { incrementCounter, decrementCounter, data } = this.props;
+    const { incrementCounter, decrementCounter, data, openModal } = this.props;
     const inputProps = {
       value: this.state.address,
       onChange: this.onChange,
@@ -64,6 +68,7 @@ class TestComponent extends Component {
         <h3>The answer is: {data}</h3>
         <Button onClick={incrementCounter} color="green" content="Increment" />
         <Button onClick={decrementCounter} color="red" content="Decrement" />
+        <Button onClick={() => openModal('TestModal', {data: 44})} color="yellow" content="Open Modal" />
         <br />
         <br />
         <form onSubmit={this.handleFormSubmit}>
@@ -73,7 +78,7 @@ class TestComponent extends Component {
           }
           <button type="submit">Submit</button>
         </form>
-        <div style={{ height: '300px', width: '100%' }}>
+{/*         <div style={{ height: '300px', width: '100%' }}>
           <GoogleMapReact
             bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY }}
             defaultCenter={this.props.center}
@@ -84,7 +89,7 @@ class TestComponent extends Component {
               lng={30.337844}
             />
           </GoogleMapReact>
-        </div>
+        </div> */}
       </div>
     )
   }
@@ -96,7 +101,8 @@ const mapStateToProps = state => ({
 
 const actions = {
   incrementCounter,
-  decrementCounter
+  decrementCounter,
+  openModal
 }
 
 export default connect(
