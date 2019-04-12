@@ -1,20 +1,16 @@
 import React, { Component } from 'react';
-import { Button, Icon } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 
 /* Redux */
 import { connect } from 'react-redux';
-import { incrementCounter, decrementCounter } from './testActions';
+import { incrementAsync, decrementAsync } from './testActions';
 
 /* Google Maps Integration */
 import Script from 'react-load-script';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
-import GoogleMapReact from 'google-map-react';
 
 /* Modals */
 import { openModal } from '../modals/modalActions';
-
-
-/* const Marker = () => <Icon name="marker" size="big" color="red" /> */
 
 class TestComponent extends Component {
   static defaultProps = {
@@ -52,7 +48,7 @@ class TestComponent extends Component {
   }
 
   render() {
-    const { incrementCounter, decrementCounter, data, openModal } = this.props;
+    const { incrementAsync, decrementAsync, data, openModal, loading } = this.props;
     const inputProps = {
       value: this.state.address,
       onChange: this.onChange,
@@ -66,8 +62,8 @@ class TestComponent extends Component {
         />
         <h1>Test Area</h1>
         <h3>The answer is: {data}</h3>
-        <Button onClick={incrementCounter} color="green" content="Increment" />
-        <Button onClick={decrementCounter} color="red" content="Decrement" />
+        <Button loading={loading} onClick={incrementAsync} color="green" content="Increment" />
+        <Button loading={loading} onClick={decrementAsync} color="red" content="Decrement" />
         <Button onClick={() => openModal('TestModal', {data: 44})} color="yellow" content="Open Modal" />
         <br />
         <br />
@@ -96,12 +92,13 @@ class TestComponent extends Component {
 }
 
 const mapStateToProps = state => ({
-  data: state.test.data
+  data: state.test.data,
+  loading: state.test.loading
 })
 
 const actions = {
-  incrementCounter,
-  decrementCounter,
+  incrementAsync,
+  decrementAsync,
   openModal
 }
 
