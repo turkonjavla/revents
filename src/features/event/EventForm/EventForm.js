@@ -90,7 +90,7 @@ class EventForm extends Component {
   onFormSubmit = values => {
     const { id } = this.props.initialValues;
     const { history: { push, goBack }, createEvent, updateEvent } = this.props;
-    
+
     values.date = moment(values.date).format();
     values.venueLatLng = this.state.venueLatLng;
 

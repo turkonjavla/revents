@@ -34,7 +34,7 @@ class EventListItem extends Component {
               <Item.Content>
                 <Item.Header as="a">{title}</Item.Header>
                 <Item.Description>
-                  Hosted by <a>{hostedBy}</a>
+                  Hosted by <a href="!#">{hostedBy}</a>
                 </Item.Description>
               </Item.Content>
             </Item>
