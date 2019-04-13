@@ -57,7 +57,7 @@ class TestComponent extends Component {
     return (
       <div>
         <Script
-          url='https://maps.googleapis.com/maps/api/js?key=AIzaSyCxAR4zNhQ4kO1BIEe5v0Bl7zdzKh4L92Q&libraries=places'
+          url={`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&libraries=places`}
           onLoad={this.handleScriptLoaded}
         />
         <h1>Test Area</h1>
