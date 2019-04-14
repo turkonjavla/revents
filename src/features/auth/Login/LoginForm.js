@@ -15,13 +15,13 @@ const LoginForm = ({ login, handleSubmit, error }) => {
           name="email"
           component={TextInput}
           type="text"
-          placeholder="Email Address"
+          placeholder="Email"
         />
         <Field
           name="password"
           component={TextInput}
           type="password"
-          placeholder="password"
+          placeholder="Password"
         />
         <Button fluid size="large" color="teal">
           Login

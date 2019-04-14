@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { Form, Segment, Button, Label } from 'semantic-ui-react';
 import { Field, reduxForm } from 'redux-form';
-import { combineValidators, isRequired } from 'revalidate';
+import { combineValidators, composeValidators, isRequired, hasLengthLessThan, hasLengthGreaterThan } from 'revalidate';
 
 /* Actions */
 import { reigsterUser } from '../authActions';
@@ -11,9 +11,17 @@ import { reigsterUser } from '../authActions';
 import TextInput from '../../../app/common/form/TextInput';
 
 const validate = combineValidators({
-  displayName: isRequired('Display Name'),
+  displayName: composeValidators(
+    isRequired('Display name'),
+    hasLengthLessThan(18)({message: 'Display name has to be less than 18 characters'}),
+    hasLengthGreaterThan(2)({message: 'Display name has to be at least 3 characters'})
+  )(),
   email: isRequired('Email'),
-  password: isRequired('Password')
+  password: composeValidators(
+    isRequired('Password'),
+    hasLengthLessThan(18)({message: 'Passord has to be less than 18 characters'}),
+    hasLengthGreaterThan(5)({message: 'Password has to be greater than 5 characters'})
+  )()
 });
 
 const RegisterForm = ({ handleSubmit, reigsterUser, error, invalid, submitting }) => {
