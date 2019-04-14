@@ -25,7 +25,7 @@ class EventListItem extends Component {
       hostPhotoURL
     } = this.props.event;
     const { deleteEvent } = this.props;
-    const attendeeList = attendees && attendees.map(attendee => <EventListAttendees key={attendee.id} attendee={attendee} />)
+    const attendeeList = attendees && Object.values(attendees).map((attendee, index) => <EventListAttendees key={index} attendee={attendee} />)
     return (
       <Segment.Group>
         <Segment>
