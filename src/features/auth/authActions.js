@@ -50,15 +50,16 @@ export const reigsterUser = (user) => {
 }
 
 export const socialLogin = (selectedProvider) => {
-  return async(dispatch, getState, { getFirebase }) => {
+  return async (dispatch, getState, { getFirebase }) => {
     const firebase = getFirebase();
     try {
       dispatch(closeModal());
-      await firebase.login({
+      let user = await firebase.login({
         provider: selectedProvider,
         type: 'popup'
-      })
-    } 
+      });
+      console.log(user);
+    }
     catch (error) {
       console.log(error);
     }
