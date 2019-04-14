@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { Form, Segment, Button } from 'semantic-ui-react';
+import { Form, Segment, Button, Label } from 'semantic-ui-react';
 import { Field, reduxForm } from 'redux-form';
 import TextInput from '../../../app/common/form/TextInput';
 
 /* Auth */
 import { login } from '../authActions';
 
-const LoginForm = ({ login, handleSubmit }) => {
+const LoginForm = ({ login, handleSubmit, error }) => {
   return (
-    <Form onSubmit={handleSubmit(login)} error size="large">
+    <Form onSubmit={handleSubmit(login)} size="large">
       <Segment>
         <Field
           name="email"
@@ -27,6 +27,10 @@ const LoginForm = ({ login, handleSubmit }) => {
           Login
         </Button>
       </Segment>
+      {
+        error &&
+        <Label basic color="red">{error}</Label>
+      }
     </Form>
   );
 };
