@@ -15,9 +15,6 @@ import SignedInMenu from '../Menus/SignedInMenu';
 /* Modals */
 import { openModal } from '../../modals/modalActions';
 
-/* Auth */
-import { logout } from '../../auth/authActions';
-
 class NavBar extends Component {
 
   handleSignIn = () => {
@@ -73,8 +70,7 @@ const mapStateToProps = state => ({
 })
 
 const actions = {
-  openModal,
-  logout
+  openModal
 }
 
 export default withRouter(withFirebase(connect(mapStateToProps, actions)(NavBar)));

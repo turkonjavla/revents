@@ -1,6 +1,5 @@
-import { SubmissionError } from 'redux-form'
-import { SIGN_OUT_USER } from './authConstants';
-import { closeModal } from '../modals/modalActions'
+import { SubmissionError } from 'redux-form';
+import { closeModal } from '../modals/modalActions';
 
 export const login = (creds) => {
   return async (dispatch, getState, { getFirebase }) => {
@@ -12,7 +11,7 @@ export const login = (creds) => {
       dispatch(closeModal());
     }
     catch (error) {
-/*       console.log(error); */
+      /*       console.log(error); */
       throw new SubmissionError({
         _error: 'The email or password you entered is invalid'
       })
@@ -20,8 +19,36 @@ export const login = (creds) => {
   }
 }
 
-export const logout = () => {
-  return {
-    type: SIGN_OUT_USER
+export const reigsterUser = (user) => {
+  return async (dispatch, getState, { getFirestore, getFirebase }) => {
+    const firestore = getFirestore();
+    const firebase = getFirebase();
+
+    try {
+      // create the user in firebase auth
+      let createdUser = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(user.email, user.password);
+      console.log(createdUser);
+
+      // update auth profile
+      await createdUser.updateProfile({
+        displayName: user.displayName
+      });
+      // create a new profile in firestore
+      let newUser = {
+        displayName: user.displayName,
+        createdAt: firestore.FieldValue.serverTimestamp()
+      }
+
+      await firestore.set(`users/${createdUser.uid}`, {...newUser});
+      dispatch(closeModal()); 
+    }
+    catch (error) {
+/*       console.log(error); */
+      throw new SubmissionError({
+        _error: error.message
+      })
+    }
   }
 }
