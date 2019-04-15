@@ -12,7 +12,8 @@ import { reduxFirestore, getFirestore } from 'redux-firestore';
 const rrfConfig = {
   userProfile: 'users',
   attachAuthIsReady: true,
-  useFirestoreForProfile: true
+  useFirestoreForProfile: true,
+  updateProfileOnLogin: false
 }
 
 export const configureStore = (preloadedState) => {
