@@ -11,7 +11,6 @@ export const login = (creds) => {
       dispatch(closeModal());
     }
     catch (error) {
-      /*       console.log(error); */
       throw new SubmissionError({
         _error: 'The email or password you entered is invalid'
       })
@@ -29,8 +28,6 @@ export const reigsterUser = (user) => {
       let createdUser = await firebase
         .auth()
         .createUserWithEmailAndPassword(user.email, user.password);
-      console.log(createdUser);
-
       // update auth profile
       await createdUser.updateProfile({
         displayName: user.displayName
@@ -41,14 +38,40 @@ export const reigsterUser = (user) => {
         createdAt: firestore.FieldValue.serverTimestamp()
       }
 
-      await firestore.set(`users/${createdUser.uid}`, {...newUser});
-      dispatch(closeModal()); 
+      await firestore.set(`users/${createdUser.uid}`, { ...newUser });
+      dispatch(closeModal());
     }
     catch (error) {
-/*       console.log(error); */
       throw new SubmissionError({
         _error: error.message
       })
+    }
+  }
+}
+
+export const socialLogin = (selectedProvider) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    const firebase = getFirebase();
+    const firestore = getFirestore();
+
+    try {
+      dispatch(closeModal());
+      let user = await firebase.login({
+        provider: selectedProvider,
+        type: 'popup'
+      });
+
+      if (user.additionalUserInfo.isNewUser) {
+        await firestore
+          .set(`users/${user.user.uid}`, {
+            displayName: user.profile.displayName,
+            photoURL: user.profile.avatarUrl,
+            createdAt: firestore.FieldValue.serverTimestamp()
+          });
+      }
+    }
+    catch (error) {
+      console.log(error);
     }
   }
 }
