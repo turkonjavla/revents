@@ -25,7 +25,7 @@ class BasicPage extends Component {
             placeholder='Known As'
           />
           <Form.Group inline>
-          <label>Gender: </label>
+            <label>Gender: </label>
             <Field
               name="gender"
               type="radio"
@@ -50,7 +50,7 @@ class BasicPage extends Component {
             showYearDropdown={true}
             showMonthDropdown={true}
             dropdownMode="select"
-      /*       maxDate={moment().subtract(18, 'years')} */
+          /*       maxDate={moment().subtract(18, 'years')} */
           />
           <Field
             name='city'
@@ -68,4 +68,8 @@ class BasicPage extends Component {
   }
 }
 
-export default reduxForm({ form: 'userProfile', enableReinitialize: true })(BasicPage);
+export default reduxForm({
+  form: 'userProfile',
+  enableReinitialize: true,
+  destroyOnUnmount: false
+})(BasicPage);
