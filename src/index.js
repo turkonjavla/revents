@@ -23,7 +23,7 @@ let render = () => {
     <Provider store={store}>
       <Router>
         <ScrollToTop>
-          <ReduxToastr 
+          <ReduxToastr
             position="bottom-right"
             transitionIn="fadeIn"
             transitionOut="fadeOut"
@@ -42,5 +42,9 @@ if (module.hot) {
   });
 }
 
-render();
+store.firebaseAuthIsReady
+  .then(() => {
+    render();
+  });
+
 serviceWorker.unregister();
