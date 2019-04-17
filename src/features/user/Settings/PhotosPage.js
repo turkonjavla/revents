@@ -11,7 +11,7 @@ import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 
 /* User Actions */
-import { uploadProfileImage } from '../userActions';
+import { uploadProfileImage, deletePhoto } from '../userActions';
 
 class PhotosPage extends Component {
   state = {
@@ -62,11 +62,20 @@ class PhotosPage extends Component {
     }, 'image/jpeg')
   }
 
+  handlePhotoDelete = photo => () => {
+    try {
+      this.props.deletePhoto(photo);
+    } 
+    catch (error) {
+      toastr.error('Oops', error.message)
+    }
+  }
+
   render() {
     const { photos, profile } = this.props;
     let filteredPhotos;
 
-    if(photos) {
+    if (photos) {
       filteredPhotos = photos.filter(photo => {
         return photo.url !== profile.photoURL
       })
@@ -137,7 +146,7 @@ class PhotosPage extends Component {
                 />
                 <div className='ui two buttons'>
                   <Button basic color='green'>Main</Button>
-                  <Button basic icon='trash' color='red' />
+                  <Button onClick={this.handlePhotoDelete(photo)} basic icon='trash' color='red' />
                 </div>
               </Card>
             ))
@@ -166,7 +175,8 @@ const mapStateToProps = state => ({
 });
 
 const actions = {
-  uploadProfileImage
+  uploadProfileImage,
+  deletePhoto
 }
 
 export default compose(
