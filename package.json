@@ -10,6 +10,7 @@
     "google-map-react": "^0.34.0",
     "moment": "^2.22.0",
     "react": "^16.8.6",
+    "react-cropper": "^1.0.1",
     "react-datepicker": "^1.4.0",
     "react-dom": "^16.8.6",
     "react-dropzone": "^4.2.9",
