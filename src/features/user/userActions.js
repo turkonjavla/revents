@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { toastr } from 'react-redux-toastr';
 import cuid from 'cuid';
+import { asyncActionStart, asyncActionFinish, asyncActionError } from '../async/asyncActions';
 
 export const updateProfile = (user) => {
   return async (dispatch, getState, { getFirebase }) => {
@@ -33,6 +34,7 @@ export const uploadProfileImage = (file, fileName) => {
     }
 
     try {
+      dispatch(asyncActionStart());
       // upload file to firebse storage
       let uploadedFile = await firebase.uploadFile(path, file, null, options);
 
@@ -54,7 +56,7 @@ export const uploadProfileImage = (file, fileName) => {
       }
 
       // add new photo as new image in photos collection
-      return await firestore.add({
+      await firestore.add({
         collection: 'users',
         doc: user.uid,
         subcollections: [{ collection: 'photos' }]
@@ -62,9 +64,11 @@ export const uploadProfileImage = (file, fileName) => {
           name: imageName,
           url: downloadUrl
         })
+      dispatch(asyncActionFinish());
     }
     catch (error) {
       console.log(error);
+      dispatch(asyncActionError());
       throw new Error('Problem uploading photo');
     }
   }
