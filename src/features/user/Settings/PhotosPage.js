@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase';
+import { compose } from 'redux'
 import { toastr } from 'react-redux-toastr';
 import { Image, Segment, Header, Divider, Grid, Button, Card, Icon } from 'semantic-ui-react';
 
@@ -61,6 +63,15 @@ class PhotosPage extends Component {
   }
 
   render() {
+    const { photos, profile } = this.props;
+    let filteredPhotos;
+
+    if(photos) {
+      filteredPhotos = photos.filter(photo => {
+        return photo.url !== profile.photoURL
+      })
+    }
+
     return (
       <Segment>
         <Header dividing size='large' content='Your Photos' />
@@ -114,26 +125,51 @@ class PhotosPage extends Component {
         <Header sub color='blue' content='All Photos' />
         <Card.Group itemsPerRow={5}>
           <Card>
-            <Image src='https://randomuser.me/api/portraits/men/20.jpg' />
+            <Image src={profile.photoURL} />
             <Button positive>Main Photo</Button>
           </Card>
-          <Card >
-            <Image
-              src='https://randomuser.me/api/portraits/men/20.jpg'
-            />
-            <div className='ui two buttons'>
-              <Button basic color='green'>Main</Button>
-              <Button basic icon='trash' color='red' />
-            </div>
-          </Card>
+          {
+            photos &&
+            filteredPhotos.map(photo => (
+              <Card key={photo.id}>
+                <Image
+                  src={photo.url}
+                />
+                <div className='ui two buttons'>
+                  <Button basic color='green'>Main</Button>
+                  <Button basic icon='trash' color='red' />
+                </div>
+              </Card>
+            ))
+          }
         </Card.Group>
       </Segment>
     );
   }
 }
 
+const query = ({ auth }) => {
+  return [
+    {
+      collection: 'users',
+      doc: auth.uid,
+      subcollections: [{ collection: 'photos' }],
+      storeAs: 'photos'
+    }
+  ]
+}
+
+const mapStateToProps = state => ({
+  auth: state.firebase.auth,
+  profile: state.firebase.profile,
+  photos: state.firestore.ordered.photos
+});
+
 const actions = {
   uploadProfileImage
 }
 
-export default connect(null, actions)(PhotosPage);
+export default compose(
+  connect(mapStateToProps, actions),
+  firestoreConnect(auth => query(auth))
+)(PhotosPage);
