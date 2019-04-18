@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Segment, Form, Header, Divider, Button } from 'semantic-ui-react';
 import { Field, reduxForm } from 'redux-form';
-/* import moment from 'moment'; */
+import moment from 'moment';
 
 /* Components */
 import DateInput from "../../../app/common/form/DateInput";
@@ -50,7 +50,7 @@ class BasicPage extends Component {
             showYearDropdown={true}
             showMonthDropdown={true}
             dropdownMode="select"
-          /*       maxDate={moment().subtract(18, 'years')} */
+            maxDate={moment().subtract(18, 'years')}
           />
           <Field
             name='city'
