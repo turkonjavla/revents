@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Segment, Form, Header, Divider, Button } from 'semantic-ui-react';
 import { Field, reduxForm } from 'redux-form';
+import { combineValidators, isRequired } from 'revalidate';
 import moment from 'moment';
 
 /* Components */
@@ -9,8 +10,11 @@ import PlaceInput from "../../../app/common/form/PlaceInput";
 import TextInput from "../../../app/common/form/TextInput";
 import RadioInput from '../../../app/common/form/RadioInput';
 
-class BasicPage extends Component {
+const validate = combineValidators({
+  displayName: isRequired({message: 'Please enter a display name'}),
+});
 
+class BasicPage extends Component {
   render() {
     const { pristine, submitting, handleSubmit, updateProfile } = this.props;
     return (
@@ -70,6 +74,7 @@ class BasicPage extends Component {
 
 export default reduxForm({
   form: 'userProfile',
+  validate,
   enableReinitialize: true,
   destroyOnUnmount: false
 })(BasicPage);
