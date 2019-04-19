@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { reduxForm, Field } from 'redux-form';
 import { composeValidators, combineValidators, isRequired, hasLengthGreaterThan } from 'revalidate'
 import moment from 'moment';
-import cuid from 'cuid';
 import {
   Segment,
   Form,
@@ -99,14 +98,7 @@ class EventForm extends Component {
       goBack();
     }
     else {
-      const newEvent = {
-        ...values,
-        id: cuid(),
-        hostPhotoURL: '/assets/user.png',
-        hostedBy: 'Bob'
-      };
-
-      createEvent(newEvent);
+      createEvent(values);
       push('/events');
     }
   }
@@ -170,6 +162,7 @@ class EventForm extends Component {
               <Field
                 name="date"
                 type="text"
+                autoComplete="off"
                 component={DateInput}
                 dateFormat="YYYY-MM-DD HH:mm"
                 timeFormat="HH:mm"
