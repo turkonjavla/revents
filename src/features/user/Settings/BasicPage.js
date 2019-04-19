@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Segment, Form, Header, Divider, Button } from 'semantic-ui-react';
 import { Field, reduxForm } from 'redux-form';
-/* import moment from 'moment'; */
+import { combineValidators, isRequired } from 'revalidate';
+import moment from 'moment';
 
 /* Components */
 import DateInput from "../../../app/common/form/DateInput";
@@ -9,10 +10,14 @@ import PlaceInput from "../../../app/common/form/PlaceInput";
 import TextInput from "../../../app/common/form/TextInput";
 import RadioInput from '../../../app/common/form/RadioInput';
 
-class BasicPage extends Component {
+const validate = combineValidators({
+  displayName: isRequired({ message: 'Please enter a display name' }),
+  dateOfBirth: isRequired({ message: 'Please enter a valid date' })
+});
 
+class BasicPage extends Component {
   render() {
-    const { pristine, submitting, handleSubmit, updateProfile } = this.props;
+    const { invalid, pristine, submitting, handleSubmit, updateProfile } = this.props;
     return (
       <Segment>
         <Header dividing size='large' content='Basics' />
@@ -42,6 +47,7 @@ class BasicPage extends Component {
             />
           </Form.Group>
           <Field
+            autoComplete="off"
             width={8}
             name='dateOfBirth'
             component={DateInput}
@@ -50,7 +56,7 @@ class BasicPage extends Component {
             showYearDropdown={true}
             showMonthDropdown={true}
             dropdownMode="select"
-          /*       maxDate={moment().subtract(18, 'years')} */
+            maxDate={moment().subtract(18, 'years')}
           />
           <Field
             name='city'
@@ -61,7 +67,7 @@ class BasicPage extends Component {
             width={8}
           />
           <Divider />
-          <Button disabled={pristine || submitting} size='medium' inverted color="green" content='Update Profile' />
+          <Button disabled={pristine || submitting || invalid} size='medium' inverted color="green" content='Update Profile' />
         </Form>
       </Segment>
     );
@@ -70,6 +76,7 @@ class BasicPage extends Component {
 
 export default reduxForm({
   form: 'userProfile',
+  validate,
   enableReinitialize: true,
   destroyOnUnmount: false
 })(BasicPage);
