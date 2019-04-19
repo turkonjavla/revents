@@ -16,7 +16,7 @@ const validate = combineValidators({
 
 class BasicPage extends Component {
   render() {
-    const { pristine, submitting, handleSubmit, updateProfile } = this.props;
+    const { invalid, pristine, submitting, handleSubmit, updateProfile } = this.props;
     return (
       <Segment>
         <Header dividing size='large' content='Basics' />
@@ -65,7 +65,7 @@ class BasicPage extends Component {
             width={8}
           />
           <Divider />
-          <Button disabled={pristine || submitting} size='medium' inverted color="green" content='Update Profile' />
+          <Button disabled={pristine || submitting || invalid} size='medium' inverted color="green" content='Update Profile' />
         </Form>
       </Segment>
     );
