@@ -11,7 +11,8 @@ import TextInput from "../../../app/common/form/TextInput";
 import RadioInput from '../../../app/common/form/RadioInput';
 
 const validate = combineValidators({
-  displayName: isRequired({message: 'Please enter a display name'}),
+  displayName: isRequired({ message: 'Please enter a display name' }),
+  dateOfBirth: isRequired({ message: 'Please enter a valid date' })
 });
 
 class BasicPage extends Component {
@@ -46,6 +47,7 @@ class BasicPage extends Component {
             />
           </Form.Group>
           <Field
+            autoComplete="off"
             width={8}
             name='dateOfBirth'
             component={DateInput}
