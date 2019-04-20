@@ -1,16 +1,15 @@
 import { toastr } from 'react-redux-toastr';
-import {
-  FETCH_EVENTS,
-  DELETE_EVENT
-} from "./eventConstants";
+import { FETCH_EVENTS } from "./eventConstants";
+import firebase from '../../app/config/firebase';
+import moment from 'moment';
 import {
   asyncActionStart,
   asyncActionFinish,
   asyncActionError
 } from '../async/asyncActions';
-import { fetchSampleData } from '../../app/data/mockApi';
+
+/* Helpers */
 import { createNewEvent } from '../../app/common/util/helpers';
-import moment from 'moment';
 
 export const fetchEvents = events => {
   return {
@@ -56,7 +55,6 @@ export const updateEvent = event => {
     }
     catch (error) {
       toastr.error('Oops', 'Something went wrong');
-/*       console.log(error.message) */
     }
   }
 }
@@ -81,29 +79,32 @@ export const cancelToggle = (cancelled, eventId) => {
   }
 }
 
-export const deleteEvent = eventId => {
-  return async dispatch => {
-    try {
-      dispatch({
-        type: DELETE_EVENT,
-        payload: {
-          eventId
-        }
-      });
-      toastr.success('Success!', 'Event has been removed');
-    }
-    catch (error) {
-      toastr.error('Oops', 'Something went wrong');
-    }
-  }
-}
+export const getEventsForDashboard = events => {
+  return async (dispatch, getState) => {
+    let today = new Date(Date.now());
+    const firestore = firebase.firestore();
+    const eventsQuery = firestore.collection('events').where('date', '>=', today);
 
-export const loadEvents = () => {
-  return async dispatch => {
     try {
       dispatch(asyncActionStart());
-      let events = await fetchSampleData();
-      dispatch(fetchEvents(events));
+      let querySnap = await eventsQuery.get();
+      let events = [];
+
+      for (let i = 0; i < querySnap.docs.length; i++) {
+        let evt = {
+          ...querySnap.docs[i].data(),
+          id: querySnap.docs[i].id
+        }
+        events.push(evt)
+      }
+
+      dispatch({
+        type: FETCH_EVENTS,
+        payload: {
+          events
+        }
+      });
+      
       dispatch(asyncActionFinish());
     }
     catch (error) {
