@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { withFirestore } from 'react-redux-firebase';
-import { toastr } from 'react-redux-toastr';
 import { Grid } from 'semantic-ui-react';
 import { objectToArray } from '../../../app/common/util/helpers';
-import { goingToEvent } from '../../user/userActions'
+import { goingToEvent, cancelGoingToEvent } from '../../user/userActions'
 
 /* Components */
 import EventDetailsHeader from './EventDetailsHeader';
@@ -25,7 +24,7 @@ class EventDetailsPage extends Component {
   }
 
   render() {
-    const { event, auth, goingToEvent } = this.props;
+    const { event, auth, goingToEvent, cancelGoingToEvent } = this.props;
     const attendees = event && event.attendees && objectToArray(event.attendees);
     const isHost = event.hostUid === auth.uid;
     const isGoing = attendees && attendees.some(a => a.id === auth.uid)
@@ -38,6 +37,7 @@ class EventDetailsPage extends Component {
             isHost={isHost}
             isGoing={isGoing}
             goingToEvent={goingToEvent}
+            cancelGoingToEvent={cancelGoingToEvent}
           />
           <EventDetailsInfo event={event} />
           <EventDetailsChat />
@@ -64,7 +64,8 @@ const mapStateToProps = (state) => {
 }
 
 const actions = {
-  goingToEvent
+  goingToEvent,
+  cancelGoingToEvent
 }
 
 export default withFirestore(connect(
