@@ -31,7 +31,7 @@ class EventDetailsPage extends Component {
     const isGoing = attendees && attendees.some(a => a.id === auth.uid)
     const loading = Object.values(requesting).some(a => a === true);
 
-/*     if (loading) return <LoadingComponent inverted={true} /> */
+    if (loading) return <LoadingComponent inverted={true} />
     return (
       <Grid>
         <Grid.Column width={10}>
