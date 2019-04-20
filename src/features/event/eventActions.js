@@ -56,7 +56,7 @@ export const updateEvent = event => {
     }
     catch (error) {
       toastr.error('Oops', 'Something went wrong');
-      console.log(error.message)
+/*       console.log(error.message) */
     }
   }
 }
