@@ -14,12 +14,12 @@ import EventDetailsSidebar from './EventDetailsSidebar';
 class EventDetailsPage extends Component {
 
   async componentDidMount() {
-    const { firestore, match, history: { push } } = this.props;
+    const { firestore, match } = this.props;
     await firestore.setListener(`events/${match.params.id}`);
   }
 
   async componentWillUnmount() {
-    const { firestore, match, history: { push } } = this.props;
+    const { firestore, match } = this.props;
     await firestore.unsetListener(`events/${match.params.id}`);
   }
 
