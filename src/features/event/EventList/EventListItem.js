@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
+import { objectToArray } from '../../../app/common/util/helpers';
 import {
   Segment,
   Item,
@@ -23,10 +24,17 @@ class EventListItem extends Component {
       venue,
       hostedBy,
       attendees,
-      hostPhotoURL
+      hostPhotoURL,
+      hostUid
     } = this.props.event;
-    const { deleteEvent } = this.props;
-    const attendeeList = attendees && Object.values(attendees).map((attendee, index) => <EventListAttendees key={index} attendee={attendee} />)
+    const attendeeList =
+      attendees &&
+      objectToArray(attendees).map(attendee =>
+        <EventListAttendees
+          key={attendee.id}
+          attendee={attendee}
+        />
+      )
     return (
       <Segment.Group>
         <Segment>
@@ -34,13 +42,13 @@ class EventListItem extends Component {
             <Item>
               <Item.Image size="tiny" circular src={hostPhotoURL} />
               <Item.Content>
-                <Item.Header as="a">{title}</Item.Header>
+                <Item.Header as={Link} to={`/event/${id}`}>{title}</Item.Header>
                 <Item.Description>
-                  Hosted by <a href="!#">{hostedBy}</a>
+                  Hosted by <Link to={`/profile/${hostUid}`}>{hostedBy}</Link>
                 </Item.Description>
                 {
                   this.props.event.cancelled &&
-                <Label style={{top: '-40px' }} ribbon="right" color="red" content="This event has been cancelled" />
+                  <Label style={{ top: '-40px' }} ribbon="right" color="red" content="This event has been cancelled" />
                 }
               </Item.Content>
             </Item>
@@ -67,14 +75,6 @@ class EventListItem extends Component {
             color="blue"
             floated="right"
             content="View"
-          />
-          <Button
-            as="a"
-            inverted
-            color="red"
-            floated="right"
-            content="Delete"
-            onClick={deleteEvent(id)}
           />
         </Segment>
       </Segment.Group>

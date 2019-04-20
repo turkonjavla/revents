@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { compose } from 'redux'
 import { connect } from 'react-redux';
-import { firestoreConnect } from 'react-redux-firebase';
+import { firestoreConnect, isEmpty } from 'react-redux-firebase';
 import { Grid } from "semantic-ui-react";
+
+/* User Queries */
+import { userDetailsQuery } from '../userQueries';
 
 /* Components */
 import UserDetailsPhotos from './UserDetailsPhotos';
@@ -13,12 +16,14 @@ import UserDetailsDescription from './UserDetailsDescription';
 
 class UserDetailedPage extends Component {
   render() {
-    const { profile, photos } = this.props;
+    const { profile, photos, auth, match } = this.props;
+    const isCurrentUser = auth.uid === match.params.id;
+
     return (
       <Grid>
         <UserDetailsHeader profile={profile} />
         <UserDetailsDescription profile={profile} />
-        <UserDetailsSidebar />
+        <UserDetailsSidebar isCurrentUser={isCurrentUser} />
         {
           photos &&
           photos.length > 0 &&
@@ -30,24 +35,27 @@ class UserDetailedPage extends Component {
   }
 }
 
-const query = ({ auth }) => {
-  return [
-    {
-      collection: 'users',
-      doc: auth.uid,
-      subcollections: [{ collection: 'photos' }],
-      storeAs: 'photos'
-    }
-  ]
-}
+const mapStateToProps = (state, ownProps) => {
+  let userUid = null;
+  let profile = {};
 
-const mapStateToProps = state => ({
-  profile: state.firebase.profile,
-  auth: state.firebase.auth,
-  photos: state.firestore.ordered.photos
-});
+  if(ownProps.match.params.id === state.auth.uid) {
+    profile = state.firebase.profile;
+  }
+  else {
+    profile = !isEmpty(state.firestore.ordered.profile) && state.firestore.ordered.profile[0];
+    userUid = ownProps.match.params.id;
+  }
+
+  return {
+    profile,
+    userUid,
+    auth: state.firebase.auth,
+    photos: state.firestore.ordered.photos
+  }
+};
 
 export default compose(
   connect(mapStateToProps),
-  firestoreConnect(auth => query(auth))
+  firestoreConnect((auth, userUid) => userDetailsQuery(auth, userUid))
 )(UserDetailedPage);
