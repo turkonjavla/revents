@@ -10,6 +10,7 @@ import EventDetailsHeader from './EventDetailsHeader';
 import EventDetailsInfo from './EventDetailsInfo';
 import EventDetailsChat from './EventDetailsChat';
 import EventDetailsSidebar from './EventDetailsSidebar';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 class EventDetailsPage extends Component {
 
@@ -24,11 +25,13 @@ class EventDetailsPage extends Component {
   }
 
   render() {
-    const { event, auth, goingToEvent, cancelGoingToEvent } = this.props;
+    const { event, auth, goingToEvent, cancelGoingToEvent, requesting } = this.props;
     const attendees = event && event.attendees && objectToArray(event.attendees);
     const isHost = event.hostUid === auth.uid;
     const isGoing = attendees && attendees.some(a => a.id === auth.uid)
+    const loading = Object.values(requesting).some(a => a === true);
 
+    if (loading) return <LoadingComponent inverted={true} />
     return (
       <Grid>
         <Grid.Column width={10}>
@@ -59,7 +62,8 @@ const mapStateToProps = (state) => {
 
   return {
     event,
-    auth: state.firebase.auth
+    auth: state.firebase.auth,
+    requesting: state.firestore.status.requesting
   }
 }
 
